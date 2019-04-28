@@ -13,6 +13,19 @@ class App extends Component {
     ]
   };
 
+  constructor(props) {
+    super(props);
+    console.log("App Konstruktor", this.props);
+  }
+
+  componentDidMount() {
+    console.log("App Mounted");
+  }
+
+  componentWillMount() {
+    console.log("App will Mounted");
+  }
+
   handleDelete = counterId => {
     console.log("Kurac", counterId);
     const counters = this.state.counters.filter(k => k.id !== counterId);
@@ -40,15 +53,29 @@ class App extends Component {
       counters
     });
   };
+
+  handleDecrement = counter => {
+    const counters = [...this.state.counters];
+    const index = counters.indexOf(counter);
+    counters[index] = { ...counter };
+    counters[index].value--;
+    this.setState({
+      counters
+    });
+  };
+
   render() {
     return (
       <>
-        <Navbar />
+        <Navbar
+          totalCounters={this.state.counters.filter(c => c.value > 0).length}
+        />
         <main className="container">
           <Counters
             onReset={this.handleReset}
             onDelete={this.handleDelete}
             onIncrement={this.handleIncrement}
+            onDecrement={this.handleDecrement}
             counters={this.state.counters}
           />
         </main>
